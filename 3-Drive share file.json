@@ -1,0 +1,169 @@
+{
+  "name": "3-Drive share file",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1WSY3CFPRwi7TR4z_Jm-qKLTHxD9AHRwz",
+          "mode": "list",
+          "cachedResultName": "BotVentas",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1WSY3CFPRwi7TR4z_Jm-qKLTHxD9AHRwz"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "801f28f0-1adf-4c14-8438-62be7ccd2c78",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "sZldbyWvELTdz5jJ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Google Drive Trigger').item.json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "writer",
+            "type": "group",
+            "emailAddress": "={{ $json.email }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        304,
+        -32
+      ],
+      "id": "383fcaa1-5516-4ef6-b0e9-6e9e2e58eeb4",
+      "name": "Share file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "sZldbyWvELTdz5jJ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 4,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "e12c7071-599e-4365-ad4f-2e9d24cb16fe",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        112,
+        80
+      ],
+      "id": "bb176583-b880-4332-8f60-238d082db74f"
+    }
+  ],
+  "pinData": {
+    "Replace Me": [
+      {
+        "json": {
+          "email": "dariorama60@gmail.com"
+        }
+      },
+      {
+        "json": {
+          "email": "olgaghirardi2017@gmail.com"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file": {
+      "main": [
+        []
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Share file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1be1b159-b4ec-4703-a7a7-283d77c6abbc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5897726c7287d5a66a59d11b46e689172462572c3dc8c684a438ee00e84ea71f"
+  },
+  "id": "kSQU9EepQPFW6kd9",
+  "tags": []
+}

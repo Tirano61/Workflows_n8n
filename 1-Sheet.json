@@ -1,0 +1,169 @@
+{
+  "name": "1-Curso-sheet",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Formulario de contacto",
+        "formDescription": "Contactanos cuando tengos que solucionar algun problema",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "placeholder": "Ingrese su nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Apellido",
+              "placeholder": "Ingrese su Apellido",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Ingrese su email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Descripción",
+              "placeholder": "Describa su problema",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Adjunto",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4c664018-8719-4868-aa00-27166161a30b",
+      "name": "On form submission",
+      "webhookId": "03d244ea-7380-49fd-9989-17660d2feb0e"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "13uJOyltonX4BP67f9LIcTlX4cl8hdtgvPE1WPrMzfZo",
+          "mode": "list",
+          "cachedResultName": "Datos de clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13uJOyltonX4BP67f9LIcTlX4cl8hdtgvPE1WPrMzfZo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13uJOyltonX4BP67f9LIcTlX4cl8hdtgvPE1WPrMzfZo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre": "={{ $json.Name }}",
+            "Apellido": "={{ $json.Apellido }}",
+            "Email": "={{ $json.Email }}",
+            "Descripción": "={{ $json['Descripción'] }}",
+            "adjunto": "={{ $json.Adjunto }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apellido",
+              "displayName": "Apellido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descripción",
+              "displayName": "Descripción",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "adjunto",
+              "displayName": "adjunto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6b3b4c43-eaf7-4479-b993-134211ccdace",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6AdC5bbqKuwQWFgu",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "948cb84c-1d87-4197-b133-a3c3acbd5ae2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5897726c7287d5a66a59d11b46e689172462572c3dc8c684a438ee00e84ea71f"
+  },
+  "id": "ZlIUJ0KwTYt80gEo",
+  "tags": []
+}
