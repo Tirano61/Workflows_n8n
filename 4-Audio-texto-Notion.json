@@ -1,0 +1,212 @@
+{
+  "name": "4-Audio-texto-Notion",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1TZXRI8RBCqUEMhxsk6gzdCdBCm6GVzfu",
+          "mode": "list",
+          "cachedResultName": "Audio n8n",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1TZXRI8RBCqUEMhxsk6gzdCdBCm6GVzfu"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -32
+      ],
+      "id": "6af46cae-b6c0-4c29-804a-0b9f784336dc",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "sZldbyWvELTdz5jJ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -192,
+        -32
+      ],
+      "id": "710a4c2b-0435-499e-951c-020696d44a3b",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "sZldbyWvELTdz5jJ",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        16,
+        -32
+      ],
+      "id": "153b1449-ee41-4e6a-9092-d00af7b54260",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdzqBsXCodI3WYS4",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Transcripción :\n {{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "3ca18ea1-55ca-4d15-ab0f-69d4449103e3",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "QdzqBsXCodI3WYS4",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pageId": {
+          "__rl": true,
+          "value": "https://www.notion.so/Transcripcion-26d7df95e916803caa01c3ce8ca4bce9",
+          "mode": "url"
+        },
+        "title": "={{ $('Download file').item.json.name }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "heading_1",
+              "textContent": "Summary"
+            },
+            {
+              "textContent": "=Resumen :\n{{ $json.message.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        -32
+      ],
+      "id": "b9bb7568-921a-4dd3-827d-a15c0ac328e6",
+      "name": "Create a page",
+      "credentials": {
+        "notionApi": {
+          "id": "goiGZw8oF8DhfrzS",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Create a page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "77a8449b-07e3-4394-add7-7ce6bdaa987f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5897726c7287d5a66a59d11b46e689172462572c3dc8c684a438ee00e84ea71f"
+  },
+  "id": "jFilfK8PbTSzbw5b",
+  "tags": []
+}
